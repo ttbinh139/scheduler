@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
-import axios from "axios";
+/* import { useEffect } from "react";
+import axios from "axios"; */
+import useApplicationData from "hooks/useApplicationData";
 
 import DayList from "./DayList";
 import Appointment from "./Appointment";
@@ -67,18 +68,20 @@ const appointments = {
  */
 
 export default function Application(props) {
-  /* const [day, setDay] = useState("Monday");
-  const [days, setDays] = useState([]); */
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
 
-  const [state, setState] = useState({
+  /* const [state, setState] = useState({
     day: "Monday",
     days: [],
-    // you may put the line below, but will have to remove/comment hardcoded appointments variable
     appointments: {},
     interviewers: {}
   });
 
-  //Add the line below:
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   
   const setDay = day => setState({ ...state, day });
@@ -91,17 +94,11 @@ export default function Application(props) {
     const GET_DAYS = "/api/days";
     const GET_APPOINTMENTS = "/api/appointments";
     const GET_INTERVIEWERS = "/api/interviewers";
-    /* axios.get(GET_DAYS)
-      .then(response => {
-        console.log(response);
-        setDays(response.data);
-      }) */
     Promise.all([
       axios.get(GET_DAYS),
       axios.get(GET_APPOINTMENTS),
       axios.get(GET_INTERVIEWERS)
     ]).then((all) => {
-      // set your states here with the correct values...
       setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
     })
   }, []);
@@ -117,11 +114,6 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment
     };
-    
-    /* setState({
-      ...state,
-      appointments
-    }); */
     const api = `/api/appointments/${id}`;
     return axios.put(api, {interview})
       .then(res => {
@@ -148,9 +140,9 @@ export default function Application(props) {
         console.log("Put successfull");
         //setState({...state, appointments})
       });
-  }
+  } */
   
-
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
   //const schedule = Object.values(appointments).map(appointment => {
   const schedule = dailyAppointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
