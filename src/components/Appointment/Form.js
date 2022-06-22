@@ -19,7 +19,6 @@ function Form(props) {
 
   const save = function() {
     console.log("On save - form component");
-    console.log("Intervieer: ",interviewer);
     props.onSave(student, interviewer);
   }
 
