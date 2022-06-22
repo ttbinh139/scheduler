@@ -62,6 +62,7 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          onEdit={() => transition(EDIT)}
           confirmCancel={() => transition(CONFIRM_DELETE)}
         />
       )}
@@ -78,6 +79,15 @@ export default function Appointment(props) {
       {mode === ERROR_DELETE && <Error message="Could not delete appointment." onClose={() => back()} /> }
       {mode === CREATE && (
         <Form onSave={save} interviewers={props.interviewers} onCancel={() => back()}/>
+      )}
+      {mode === EDIT && (
+        <Form
+          student={props.interview.student}
+          interviewer={props.interview.interviewer.id}
+          interviewers={props.interviewers}
+          onSave={save}
+          onCancel={() => back()}
+        />
       )}
     </article>
   );
