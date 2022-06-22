@@ -6,6 +6,7 @@ import DayList from "./DayList";
 import Appointment from "./Appointment";
 
 import "components/Application.scss";
+import { getAppointmentsForDay } from "helpers/selectors";
 
 /* const days = [
   {
@@ -23,7 +24,7 @@ import "components/Application.scss";
     name: "Wednesday",
     spots: 0,
   },
-]; */
+];
 
 const appointments = {
   "1": {
@@ -63,7 +64,7 @@ const appointments = {
     time: "4pm",
   }
 };
-
+ */
 
 export default function Application(props) {
   /* const [day, setDay] = useState("Monday");
@@ -75,23 +76,35 @@ export default function Application(props) {
     // you may put the line below, but will have to remove/comment hardcoded appointments variable
     appointments: {}
   });
+
+  //Add the line below:
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
   
   const setDay = day => setState({ ...state, day });
 
   const setDays = (days) => {
     setState(prev => ({ ...prev, days }));
   };
-
+  
   useEffect(() => {
     const GET_DAYS = "/api/days";
-    axios.get(GET_DAYS)
+    const GET_APPOINTMENTS = "/api/appointments";
+    /* axios.get(GET_DAYS)
       .then(response => {
         console.log(response);
         setDays(response.data);
-      })
+      }) */
+    Promise.all([
+      axios.get(GET_DAYS),
+      axios.get(GET_APPOINTMENTS)
+    ]).then((all) => {
+      // set your states here with the correct values...
+      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data}));
+    })
   }, []);
 
-  const schedule = Object.values(appointments).map(appointment => {
+  //const schedule = Object.values(appointments).map(appointment => {
+  const schedule = dailyAppointments.map(appointment => {
     return <Appointment 
         /* key={appointment.id} 
         id={appointment.id} 
