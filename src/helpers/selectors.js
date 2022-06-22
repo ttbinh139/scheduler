@@ -36,6 +36,30 @@ export function getInterview(state, interview) {
     }
   }
   //console.log(interviewer);
-  interview.interviewer = interviewer;
-  return interview;
-}
+  /* interview.interviewer = interviewer;
+  return interview; */
+  return {
+    ...interview,
+    interviewer: interviewer
+  }
+};
+
+export function getInterviewersForDay(state, day) {
+  const filteredDays = state.days.filter(dayItem => dayItem.name === day);
+  //console.log(filteredDays);
+  if (filteredDays.length === 0) {
+    return [];
+  } 
+  const interviewerList = filteredDays[0].interviewers;
+  //console.log(interviewerList);
+  const result = [];
+
+  for (const idx of interviewerList) {
+    //console.log(idx);
+    if (state.interviewers[idx]) {
+      result.push(state.interviewers[idx]);
+    }
+  }
+  //console.log(result);
+  return result;
+}; 

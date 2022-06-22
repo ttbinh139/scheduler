@@ -6,7 +6,7 @@ import DayList from "./DayList";
 import Appointment from "./Appointment";
 
 import "components/Application.scss";
-import { getAppointmentsForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 /* const days = [
   {
@@ -74,7 +74,8 @@ export default function Application(props) {
     day: "Monday",
     days: [],
     // you may put the line below, but will have to remove/comment hardcoded appointments variable
-    appointments: {}
+    appointments: {},
+    interviewers: {}
   });
 
   //Add the line below:
@@ -89,6 +90,7 @@ export default function Application(props) {
   useEffect(() => {
     const GET_DAYS = "/api/days";
     const GET_APPOINTMENTS = "/api/appointments";
+    const GET_INTERVIEWERS = "/api/interviewers";
     /* axios.get(GET_DAYS)
       .then(response => {
         console.log(response);
@@ -96,22 +98,26 @@ export default function Application(props) {
       }) */
     Promise.all([
       axios.get(GET_DAYS),
-      axios.get(GET_APPOINTMENTS)
+      axios.get(GET_APPOINTMENTS),
+      axios.get(GET_INTERVIEWERS)
     ]).then((all) => {
       // set your states here with the correct values...
-      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data}));
+      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
     })
   }, []);
 
   //const schedule = Object.values(appointments).map(appointment => {
   const schedule = dailyAppointments.map(appointment => {
+    const interview = getInterview(state, appointment.interview);
+    const interviewers = getInterviewersForDay(state, state.day);
     return <Appointment 
-        /* key={appointment.id} 
+        key={appointment.id} 
         id={appointment.id} 
         time={appointment.time} 
-        interview={appointment.interview}  */
-        key={appointment.id} 
-        {...appointment}
+        interview={interview}
+        interviewers={interviewers} 
+        /* key={appointment.id} 
+        {...appointment} */
       />
   });
 
