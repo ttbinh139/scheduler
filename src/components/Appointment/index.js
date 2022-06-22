@@ -7,11 +7,18 @@ import Show from "./Show";
 import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
+import Confirm from "./Confirm";
+import Error from "./Error";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
+const DELETING = "DELETING";
+const CONFIRM_DELETE = "CONFIRM_DELETE";
+const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
@@ -27,8 +34,25 @@ export default function Appointment(props) {
     props.bookInterview(props.id, interview)
       .then(res => {
         transition(SHOW);
+      })
+      .catch(err => {
+        console.log(err);
+        transition(ERROR_SAVE, true);
       });
-  }  
+  }
+  
+  const onCancelInterview = function() {
+    console.log("On cancel - application component");
+    transition(DELETING, true);
+    props.cancelInterview(props.id)
+      .then(() => {
+        transition(EMPTY);
+      })
+      .catch(err => {
+        console.log(err);
+        transition(ERROR_DELETE, true);
+      })
+  }
 
   return (
     <article className="appointment">
@@ -38,9 +62,20 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          confirmCancel={() => transition(CONFIRM_DELETE)}
+        />
+      )}
+      {mode === CONFIRM_DELETE && (
+        <Confirm
+          message="Delete the appointment?"
+          onConfirm={onCancelInterview}
+          onCancel={() => back()}
         />
       )}
       {mode === SAVING && <Status message="Saving new appointment"/>}
+      {mode === ERROR_SAVE && <Error message="Could not save appointment." onClose={() => back()} /> }
+      {mode === DELETING && <Status message="Deleting" />}
+      {mode === ERROR_DELETE && <Error message="Could not delete appointment." onClose={() => back()} /> }
       {mode === CREATE && (
         <Form onSave={save} interviewers={props.interviewers} onCancel={() => back()}/>
       )}

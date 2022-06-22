@@ -131,6 +131,24 @@ export default function Application(props) {
         });
       });
   }
+
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    const api = `/api/appointments/${id}`;
+    return axios.delete(api)
+      .then(res => {
+        console.log("Put successfull");
+        //setState({...state, appointments})
+      });
+  }
   
 
   //const schedule = Object.values(appointments).map(appointment => {
@@ -144,6 +162,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={interviewers} 
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
   });
 
