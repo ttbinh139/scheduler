@@ -66,7 +66,21 @@ const appointments = {
 
 
 export default function Application(props) {
-  const [days, setDays] = useState([]);
+  /* const [day, setDay] = useState("Monday");
+  const [days, setDays] = useState([]); */
+
+  const [state, setState] = useState({
+    day: "Monday",
+    days: [],
+    // you may put the line below, but will have to remove/comment hardcoded appointments variable
+    appointments: {}
+  });
+  
+  const setDay = day => setState({ ...state, day });
+
+  const setDays = (days) => {
+    setState(prev => ({ ...prev, days }));
+  };
 
   useEffect(() => {
     const GET_DAYS = "/api/days";
@@ -75,11 +89,7 @@ export default function Application(props) {
         console.log(response);
         setDays(response.data);
       })
-  }, [])
-
-  const [day, setDay] = useState("Monday");
-
-  //const setDay = (day) => {console.log(day)};
+  }, []);
 
   const schedule = Object.values(appointments).map(appointment => {
     return <Appointment 
@@ -103,8 +113,8 @@ export default function Application(props) {
       <hr className="sidebar__separator sidebar--centered" />
       <nav className="sidebar__menu">
       <DayList 
-        days={days} 
-        value={day} 
+        days={state.days} 
+        value={state.day} 
         onChange={setDay} 
       />
 
