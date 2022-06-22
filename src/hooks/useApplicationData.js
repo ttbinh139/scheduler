@@ -47,7 +47,7 @@ export default function useApplicationData() {
            ...state,
            appointments
          }); */
-        const days = updateSpots(id, state, false)
+        const days = updateSpots(state, appointments, id)
         setState({
           ...state,
           days,
@@ -70,7 +70,7 @@ export default function useApplicationData() {
     return axios.delete(api)
       .then(res => {
         console.log("Put successfull");
-        const days = updateSpots(id, state, true)
+        const days = updateSpots(state, appointments, id)
         setState({
           ...state,
           days,
@@ -80,11 +80,14 @@ export default function useApplicationData() {
       });
   };
 
-  function updateSpots(id, state, isPlus) {
+  function updateSpots(state, appointments, id) {
     const newDays = state.days.map(day => {
       if (day.appointments.includes(id)) {
-        const newSpots = isPlus ? day.spots + 1 : day.spots - 1;
-        return { ...day, spots: newSpots };
+        const dayAppointments = day.appointments;
+        const emptySpots = dayAppointments.filter(id => !appointments[id].interview);
+        const spots = emptySpots.length;
+        //const newSpots = isPlus ? day.spots + 1 : day.spots - 1;
+        return { ...day, spots: spots };
       }
       return day;
     })
