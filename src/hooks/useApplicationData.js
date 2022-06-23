@@ -43,10 +43,6 @@ export default function useApplicationData() {
     const api = `/api/appointments/${id}`;
     return axios.put(api, { interview })
       .then(res => {
-        /*  setState({
-           ...state,
-           appointments
-         }); */
         const days = updateSpots(state, appointments, id)
         setState({
           ...state,
@@ -86,7 +82,6 @@ export default function useApplicationData() {
         const dayAppointments = day.appointments;
         const emptySpots = dayAppointments.filter(id => !appointments[id].interview);
         const spots = emptySpots.length;
-        //const newSpots = isPlus ? day.spots + 1 : day.spots - 1;
         return { ...day, spots: spots };
       }
       return day;

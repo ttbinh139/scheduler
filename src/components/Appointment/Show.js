@@ -22,7 +22,7 @@ function Show(props) {
             className="appointment__actions-button"
             src="images/trash.png"
             alt="Delete"
-            onClick={props.confirmCancel} //Need to change to confirm before delete
+            onClick={props.confirmCancel}
           />
         </section>
       </section>
