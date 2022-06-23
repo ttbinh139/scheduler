@@ -9,8 +9,11 @@ Create a modern client application using the React view library.
 
 
 ## Screenshots
+View all Appointments
 ![View all Appointments](https://github.com/ttbinh139/scheduler/blob/master/docs/appointments_view.png?raw=true)
+Create/Edit Appointments
 ![Create/Edit Appointments](https://github.com/ttbinh139/scheduler/blob/master/docs/appointments_create-edit.png?raw=true)
+Cancel Appointments
 ![Cancel Appointments](https://github.com/ttbinh139/scheduler/blob/master/docs/appointments_delete.png?raw=true)
 
 ## Setup
