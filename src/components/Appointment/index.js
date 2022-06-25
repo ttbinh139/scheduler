@@ -30,7 +30,7 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    transition(SAVING, true);
+    transition(SAVING);
     props.bookInterview(props.id, interview)
       .then(res => {
         transition(SHOW);
@@ -70,15 +70,15 @@ export default function Appointment(props) {
         <Confirm
           message="Delete the appointment?"
           onConfirm={onCancelInterview}
-          onCancel={() => back()}
+          onCancel={back}
         />
       )}
-      {mode === SAVING && <Status message="Saving new appointment"/>}
-      {mode === ERROR_SAVE && <Error message="Could not save appointment." onClose={() => back()} /> }
+      {mode === SAVING && <Status message="Saving appointment"/>}
+      {mode === ERROR_SAVE && <Error message="Could not save appointment." onClose={back} /> }
       {mode === DELETING && <Status message="Deleting" />}
-      {mode === ERROR_DELETE && <Error message="Could not delete appointment." onClose={() => back()} /> }
+      {mode === ERROR_DELETE && <Error message="Could not delete appointment." onClose={back} /> }
       {mode === CREATE && (
-        <Form onSave={save} interviewers={props.interviewers} onCancel={() => back()}/>
+        <Form onSave={save} interviewers={props.interviewers} onCancel={back}/>
       )}
       {mode === EDIT && (
         <Form
@@ -86,7 +86,7 @@ export default function Appointment(props) {
           interviewer={props.interview.interviewer.id}
           interviewers={props.interviewers}
           onSave={save}
-          onCancel={() => back()}
+          onCancel={back}
         />
       )}
     </article>
