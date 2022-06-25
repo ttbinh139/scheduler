@@ -20,6 +20,14 @@ Cancel Appointments
 
 Install dependencies with `npm install`.
 
+## API server
+
+The Scheduler run with pre-deployed API server. To start, you need to download the API files from github, https://github.com/ttbinh139/scheduler-api the run `npm install` to install all dependencies. 
+
+After that you can run it locally by command `npm start`. The API server will run at port 8001 that separate with the Scheduler. The Scheduler app will use this api as a database and get information from it.
+
+To test the error message, you can run command `npm run error`
+
 ## Running Webpack Development Server
 
 ```sh
