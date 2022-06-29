@@ -18,7 +18,7 @@ function reducer(state, action) {
       const {id, interview} = action;
       const appointment = {
         ...state.appointments[id],
-        interview: { ...interview }
+        interview: interview ? { ...interview } : null
       };
   
       const appointments = {
@@ -64,6 +64,21 @@ export default function useApplicationData() {
   }; */
 
   useEffect(() => {
+    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+    ws.onopen = function (event) {
+      ws.send(JSON.stringify("ping"));
+    }
+
+    ws.onmessage = (event) => {
+      const receivedData = JSON.parse(event.data)
+
+      if (receivedData.type === SET_INTERVIEW) {
+        const { type, id, interview } = receivedData;
+        dispatch({ type, id, interview });
+      }
+    }
+
     const GET_DAYS = "/api/days";
     const GET_APPOINTMENTS = "/api/appointments";
     const GET_INTERVIEWERS = "/api/interviewers";
@@ -74,7 +89,12 @@ export default function useApplicationData() {
     ]).then((all) => {
       //setState(prev => ({ ...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
       dispatch({type:SET_APPLICATION_DATA, days: all[0].data, appointments: all[1].data, interviewers: all[2].data})
-    })
+    });
+
+    function cleanup() {
+      ws.close()
+    }
+    return cleanup;
   }, []);
 
   function bookInterview(id, interview) {
